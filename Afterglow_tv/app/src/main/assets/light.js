@@ -13,9 +13,11 @@ const settingsPanel = $("phone-settings");
 const settingsToggle = $("phone-settings-toggle");
 const setupGuide = $("setup-guide");
 const guideVideo = $("guide-video");
-const placements = {
-  center: "Behind the center", left: "Behind the left edge", right: "Behind the right edge",
-  below: "Upright below the screen", flat: "Flat on the desk",
+const guidePlacement = $("guide-placement");
+const guideCaptions = {
+  "behind-tv": "Prop the phone sideways behind the TV, with its screen facing the wall.",
+  "below-tv": "Prop the phone upright below the TV, with its screen facing the wall.",
+  "tv-stand": "Place the phone flat on the TV stand with its screen facing up.",
 };
 let guideRequest;
 let guideUrl;
@@ -59,25 +61,24 @@ function showSettings(open) {
   showControls();
 }
 
-async function openSetupGuide() {
+function openSetupGuide() {
   if (setupGuide.open) return;
-  resetGuide();
-  const view = {...latest, ...localSettings};
-  const placement = Object.prototype.hasOwnProperty.call(placements, view.placement) ? view.placement : "center";
-  const orientation = view.orientation === "portrait" ||
-    (view.orientation !== "landscape" && gradient.canvas.clientHeight > gradient.canvas.clientWidth)
-    ? "portrait" : "landscape";
-  $("guide-title").textContent = `${placements[placement]} � ${orientation}`;
-  $("guide-caption").textContent = placement === "flat"
-    ? "Lay the phone flat with its screen facing up."
-    : "Face the phone screen toward the wall and leave a gap for the light to spread.";
-  $("guide-error").hidden = true;
+  const placement = localSettings.placement ?? latest?.placement;
+  guidePlacement.value = placement === "below" ? "below-tv" : placement === "flat" ? "tv-stand" : "behind-tv";
   setupGuide.showModal();
+  void loadGuide();
+}
+
+async function loadGuide() {
+  resetGuide();
+  const placement = guidePlacement.value;
+  $("guide-caption").textContent = guideCaptions[placement];
+  $("guide-error").hidden = true;
   const request = new AbortController();
   guideRequest = request;
   try {
     // The small bundled clips can be loaded in full and seeked locally by the browser.
-    const response = await fetch(`/guides/${placement}-${orientation}.mp4`, {signal: request.signal});
+    const response = await fetch(`/guides/${placement}.mp4`, {signal: request.signal});
     if (!response.ok) throw new Error("Guide unavailable");
     const clip = await response.blob();
     if (guideRequest !== request) return;
@@ -265,7 +266,8 @@ document.addEventListener("fullscreenchange", () => {
 });
 $("leave").addEventListener("click", () => disconnect());
 settingsToggle.addEventListener("click", () => showSettings(settingsPanel.hidden));
-$("setup-help").addEventListener("click", () => void openSetupGuide());
+$("setup-help").addEventListener("click", openSetupGuide);
+guidePlacement.addEventListener("change", () => void loadGuide());
 $("close-guide").addEventListener("click", () => setupGuide.close());
 setupGuide.addEventListener("close", () => { if (!setupGuide.open) resetGuide(); });
 guideVideo.addEventListener("error", () => {

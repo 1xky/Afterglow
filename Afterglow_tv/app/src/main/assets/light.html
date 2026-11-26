@@ -70,6 +70,14 @@
         <h2 id="guide-title">Phone setup</h2>
         <button id="close-guide" class="secondary" type="button" autofocus>Close</button>
       </div>
+      <label class="field">
+        <span>TV placement guide</span>
+        <select id="guide-placement">
+          <option value="behind-tv">Behind the TV (recommended)</option>
+          <option value="below-tv">Upright below the TV</option>
+          <option value="tv-stand">Face-up on the TV stand</option>
+        </select>
+      </label>
       <p id="guide-caption" class="hint small"></p>
       <video id="guide-video" controls playsinline preload="metadata" aria-labelledby="guide-title"></video>
       <p id="guide-error" class="hint small" role="status" hidden>The video could not play. Follow the placement instructions above.</p>

@@ -23,7 +23,7 @@ You can also [download the source ZIP](https://github.com/1xky/Afterglow/archive
 
 ### Android TV preview
 
-Pair on the same local network, then tap the phone screen and open **Placement → View phone setup video**. The guide matches the selected placement and orientation. The clips are bundled in the APK. Start with the phone behind the center of the TV in landscape, with its screen facing the wall.
+Pair on the same local network, then tap the phone screen and open **Placement → View phone setup video**. Pick one of three short Android TV videos: **Behind the TV** (recommended), **Upright below the TV**, or **Face-up on the TV stand**. The videos are bundled in the APK and play over your local network.
 
 Use **Test light** first to check the phone connection. Then select **Start sync**, approve Android’s screen-sharing prompt, press **Home** on the remote, and try an unprotected video in another Android TV app. Return to Afterglow and select **Stop sync**. Capture support may vary by TV model and protected playback may appear black. Physical TV testing is still pending.
 

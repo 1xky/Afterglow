@@ -73,11 +73,9 @@ final class LightHost {
                 for (String file : new String[] {"light.html", "style.css", "light.js", "gradient.js"}) {
                     loaded.put(file, readAsset(context, file));
                 }
-                for (String placement : new String[] {"center", "left", "right", "below", "flat"}) {
-                    for (String orientation : new String[] {"landscape", "portrait"}) {
-                        String file = "guides/" + placement + "-" + orientation + ".mp4";
-                        loaded.put(file, readAsset(context, file));
-                    }
+                for (String placement : new String[] {"behind-tv", "below-tv", "tv-stand"}) {
+                    String file = "guides/" + placement + ".mp4";
+                    loaded.put(file, readAsset(context, file));
                 }
                 assets.putAll(loaded);
             }
