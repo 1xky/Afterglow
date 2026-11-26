@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#101016">
+  <title>Afterglow Phone Light</title>
+  <link rel="stylesheet" href="/style.css">
+  <script type="module" src="/light.js"></script>
+</head>
+<body class="phone">
+  <main id="pair-screen" class="phone-card">
+    <div class="brand"><i class="brand-mark" aria-hidden="true"></i>Afterglow</div>
+    <h1>Phone light</h1>
+    <p>Enter the pairing code shown on your TV.</p>
+    <form id="pair-form">
+      <label class="field" for="code"><span>Pairing code</span></label>
+      <input id="code" type="text" minlength="8" maxlength="8" required
+             autocapitalize="none" autocorrect="off" autocomplete="off" spellcheck="false">
+      <button class="primary" type="submit">Start light</button>
+    </form>
+    <p id="pair-error" class="error" role="alert" hidden></p>
+  </main>
+  <section id="light-screen" aria-label="Phone light" hidden>
+    <video id="light-video" muted playsinline disablepictureinpicture aria-hidden="true" hidden></video>
+    <canvas id="light" width="97" height="97" aria-hidden="true"></canvas>
+    <button id="show-controls" class="touch-surface" type="button" aria-label="Show light controls"></button>
+    <div id="light-controls" class="light-controls">
+      <span id="light-status" role="status">Connecting…</span>
+      <button id="full" class="secondary" type="button" hidden>Fullscreen</button>
+      <button id="phone-settings-toggle" class="secondary" type="button"
+              aria-expanded="false" aria-controls="phone-settings">Placement</button>
+      <button id="leave" class="secondary" type="button">Disconnect</button>
+      <div id="phone-settings" class="phone-settings" hidden>
+        <label class="field">
+          <span>This phone's placement</span>
+          <select id="phone-placement">
+            <option value="">Use TV setting</option>
+            <option value="center">Behind the center</option>
+            <option value="left">Behind the left edge</option>
+            <option value="right">Behind the right edge</option>
+            <option value="below">Upright below the screen</option>
+            <option value="flat">Flat on the desk</option>
+          </select>
+        </label>
+        <label class="field">
+          <span>Orientation</span>
+          <select id="phone-orientation">
+            <option value="">Use TV setting</option>
+            <option value="auto">Match phone</option>
+            <option value="landscape">Landscape layout</option>
+            <option value="portrait">Portrait layout</option>
+          </select>
+        </label>
+        <label class="field">
+          <span>Mirror gradient</span>
+          <select id="phone-mirror">
+            <option value="">Use TV setting</option>
+            <option value="on">On</option>
+            <option value="off">Off</option>
+          </select>
+        </label>
+      </div>
+    </div>
+    <p id="sleep-note" class="sleep-note" hidden>If the screen dims, extend your phone’s display timeout.</p>
+  </section>
+</body>
+</html>
+

@@ -1,0 +1,127 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#101016">
+  <title>Afterglow</title>
+  <link rel="stylesheet" href="/style.css">
+  <script type="module" src="/desktop.js"></script>
+</head>
+<body class="desktop">
+  <main class="shell">
+    <header class="topbar">
+      <div class="brand"><i class="brand-mark" aria-hidden="true"></i>Afterglow</div>
+      <span id="connection" class="connection">No phone connected</span>
+    </header>
+    <section class="intro">
+      <h1>Movie lighting</h1>
+      <p>Turn your phone screen into a light that follows the movie.</p>
+    </section>
+
+    <div class="dashboard">
+      <section class="card live-card" aria-labelledby="live-title">
+        <div class="card-heading">
+          <h2 id="live-title">Screen sync</h2>
+          <span id="capture-status" class="status" role="status">Off</span>
+        </div>
+        <div class="preview">
+          <canvas id="preview" width="97" height="57" aria-label="Gradient preview"></canvas>
+          <span id="preview-label" class="preview-label">Example gradient</span>
+        </div>
+        <p id="capture-help" class="hint">Start screen sync, then fullscreen your movie.</p>
+        <div class="button-row">
+          <button id="capture" class="primary" type="button" disabled>Start screen sync</button>
+          <button id="test-light" class="secondary" type="button" disabled>Test light</button>
+          <button id="browser-capture" class="text-button" type="button" hidden>Share a tab or window</button>
+        </div>
+        <p id="capture-error" class="error" role="alert" hidden></p>
+        <p id="connection-error" class="error" role="status" hidden></p>
+        <video id="capture-video" class="capture-video" muted playsinline aria-hidden="true"></video>
+      </section>
+
+      <section class="card" aria-labelledby="phone-title">
+        <div class="card-heading"><h2 id="phone-title">Pair your phone</h2></div>
+        <p class="hint">Use the same Wi-Fi, or connect your laptop to your phone’s hotspot or USB tethering.</p>
+        <label id="network-field" class="field" hidden>
+          <span>Laptop network address</span>
+          <select id="network"></select>
+        </label>
+        <div class="pairing-layout">
+          <canvas id="pair-qr" class="pair-qr" role="img" aria-label="QR code to pair your phone" hidden></canvas>
+          <div>
+            <label class="field pairing-address">
+              <span>Open on your phone</span>
+              <input id="phone-address" type="text" readonly placeholder="Waiting for a local address">
+            </label>
+            <div class="pairing">
+              <div><span class="field-label">Pairing code</span><strong id="pair-code">········</strong></div>
+              <button id="copy-link" class="secondary" type="button" disabled>Copy link</button>
+            </div>
+          </div>
+        </div>
+        <p id="pair-help" class="hint small" role="status">Scan the code or open the address and enter the pairing code. Tap <strong>Start light</strong>. Each phone can choose its own placement.</p>
+        <p id="no-address" class="hint small" hidden>Connect the laptop to a network, then reload this page.</p>
+      </section>
+
+      <section class="card settings" aria-labelledby="settings-title">
+        <div class="card-heading"><h2 id="settings-title">Light settings</h2></div>
+        <div class="setup-recommendation">
+          <div>
+            <span class="recommendation-label">Recommended setup</span>
+            <strong>Behind the center · Landscape</strong>
+            <p>Prop your phone up with its screen facing the wall.</p>
+          </div>
+        </div>
+        <div class="settings-grid">
+          <label class="field">
+            <span>Default phone placement</span>
+            <select id="placement">
+              <option value="center">Behind the center</option>
+              <option value="left">Behind the left edge</option>
+              <option value="right">Behind the right edge</option>
+              <option value="below">Upright below the screen</option>
+              <option value="flat">Flat on the desk</option>
+            </select>
+          </label>
+          <label class="field">
+            <span>Orientation</span>
+            <select id="orientation">
+              <option value="auto">Match phone</option>
+              <option value="landscape">Landscape layout</option>
+              <option value="portrait">Portrait layout</option>
+            </select>
+          </label>
+          <label class="field brightness">
+            <span>Light intensity <output id="intensity-value" for="intensity">100%</output></span>
+            <input id="intensity" type="range" min="10" max="100" value="100">
+          </label>
+          <label class="field brightness">
+            <span>Vividness <output id="vividness-value" for="vividness">55%</output></span>
+            <input id="vividness" type="range" min="0" max="100" value="55">
+          </label>
+          <div class="light-options">
+            <label class="check"><input id="boost" type="checkbox" checked> Brightness boost</label>
+            <label class="check"><input id="mirror" type="checkbox" checked> Mirror the gradient</label>
+          </div>
+        </div>
+        <div class="setup-actions">
+          <p id="placement-tip" class="hint small">Center the phone behind the screen and leave a gap to the wall.</p>
+          <button id="setup-help" class="text-button" type="button" aria-haspopup="dialog">View phone setup video</button>
+        </div>
+        <p id="settings-error" class="error" role="alert" hidden></p>
+      </section>
+    </div>
+  </main>
+  <dialog id="setup-guide" class="setup-guide" aria-labelledby="guide-title">
+    <div class="card-heading">
+      <h2 id="guide-title">Phone setup</h2>
+      <button id="close-guide" class="secondary" type="button" autofocus>Close</button>
+    </div>
+    <p id="guide-caption" class="hint small"></p>
+    <video id="guide-video" width="1280" height="720" controls playsinline preload="metadata"
+           aria-labelledby="guide-title"></video>
+    <p id="guide-error" class="error" role="alert" hidden>The video could not load. Follow the placement instructions above.</p>
+  </dialog>
+</body>
+</html>
