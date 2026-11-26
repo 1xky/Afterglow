@@ -1,24 +1,31 @@
 # Afterglow
 
-Afterglow turns a phone screen into ambient lighting that follows a movie or other content on a PC or Android TV. The host samples colors locally and sends color palettes to paired phones over the local network. The phone opens the light in its browser.
+Turn a spare phone into ambient lighting that follows what's on your PC or Android TV. Afterglow samples the screen locally and sends small color palettes over your Wi-Fi. Open the light in your phone's browser.
 
-## PC
+## Download
 
-1. On GitHub, choose **Code → Download ZIP** and extract it.
-2. Open `Afterglow_pc/Afterglow` and use the launcher for your system.
+Choose your platform under **Assets** on the [latest release](https://github.com/1xky/Afterglow/releases/latest).
 
-| System | Launcher |
-| --- | --- |
-| Windows 11 | Double-click `Start Afterglow.cmd`. The Windows x64 Python runtime is included. |
-| macOS (preview) | Install Python 3.10 or newer and run `sh "Start Afterglow.command"` in Terminal from the app folder. |
-| Linux (preview) | Install Python 3.10 or newer and run `sh start-afterglow.sh` from the app folder. |
+| Platform | Download | Start here |
+| --- | --- | --- |
+| Windows 11 (x64) | `Afterglow-Windows-x64.zip` | Extract the ZIP and double-click `Start Afterglow.cmd`. Python is included. |
+| macOS (preview) | `Afterglow-macOS.zip` | Install Python 3.10+, extract the ZIP, and run `sh "Start Afterglow.command"` in Terminal from the extracted folder. |
+| Linux (preview) | `Afterglow-Linux.zip` | Install Python 3.10+, extract the ZIP, and run `sh start-afterglow.sh` from the extracted folder. |
+| Android TV (preview) | `Afterglow-Android-TV-preview.apk` | If available, install the APK on an Android 8.0+ TV that supports sideloading. |
 
-Connect the phone and computer to the same Wi-Fi, scan the pairing QR code, and tap **Start light** on the phone. Use **Test light** to check the connection, then start screen sync.
+While release downloads are unavailable, [download the source ZIP](https://github.com/1xky/Afterglow/archive/refs/heads/main.zip). The PC launchers are in `Afterglow_pc/Afterglow`. For TV, open [Afterglow_tv](Afterglow_tv) in Android Studio, install Android SDK 35, and build the APK.
 
-See the [PC setup guide](Afterglow_pc/Afterglow/README.md) for phone placement, screen sharing, and troubleshooting.
+## First run
 
-## Android TV
+1. Open Afterglow on the PC or TV and connect your phone to the same Wi-Fi.
+2. Scan the pairing QR code, tap **Start light** on the phone, and select **Test light** on the host.
+3. On PC, try placing the phone sideways behind the center of your display with its screen facing the wall. Select **Start screen sync**, then fullscreen the movie. On macOS and Linux, choose what to share in the browser picker. On TV, select **Start sync** and approve screen sharing.
 
-The [Android TV project](Afterglow_tv) is provided as source. Open it in Android Studio, install Android SDK 35 if prompted, and build an APK to install on your TV. The app targets TVs running Android 8.0 or later.
+## Features
 
-On the TV, open Afterglow and pair a phone on the same local network using the QR code. Select **Test light**, then **Start sync** and approve screen sharing on the TV.
+- **Live color gradients.** The phone shows a blend of colors from different parts of the screen.
+- **QR pairing on your local network.** Pair multiple phones, each with its own placement. The PC can also connect through a phone hotspot or USB tethering.
+- **Adjustable light on PC.** Set intensity, vividness, brightness boost, and mirroring. Choose from five phone placements, with short setup videos for landscape and portrait.
+- **Flexible PC capture.** Windows supports fullscreen capture. Browser sharing can capture a tab, window, or display where supported.
+
+If the light stays dark, try **Test light** and an unprotected video. Protected playback may appear black in screen capture. See the [PC setup guide](Afterglow_pc/Afterglow/README.md) for more help.

@@ -1,0 +1,61 @@
+name: Package Afterglow
+
+on:
+  push:
+    branches: [main]
+    paths: ['.github/workflows/release.yml']
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: afterglow-release
+  cancel-in-progress: false
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main'
+    steps:
+      - uses: actions/checkout@v4
+      - name: Package PC launchers
+        run: |
+          set -eu
+          mkdir dist
+          app=HEAD:Afterglow_pc/Afterglow
+          common=(afterglow.py palette.py web README.md)
+          git archive --format=zip -o dist/Afterglow-Windows-x64.zip "$app" "${common[@]}" windows_capture.py runtime 'Start Afterglow.cmd'
+          git archive --format=zip -o dist/Afterglow-macOS.zip "$app" "${common[@]}" start-afterglow.sh 'Start Afterglow.command'
+          git archive --format=zip -o dist/Afterglow-Linux.zip "$app" "${common[@]}" start-afterglow.sh
+      - uses: actions/setup-java@v4
+        continue-on-error: true
+        with:
+          distribution: temurin
+          java-version: '17'
+      - uses: gradle/actions/setup-gradle@v4
+        continue-on-error: true
+        with:
+          gradle-version: '8.9'
+      - name: Build Android TV preview
+        continue-on-error: true
+        run: |
+          set -eu
+          sdkmanager 'platforms;android-35' 'build-tools;34.0.0'
+          gradle -p Afterglow_tv --no-daemon :app:assembleDebug
+          cp Afterglow_tv/app/build/outputs/apk/debug/app-debug.apk dist/Afterglow-Android-TV-preview.apk
+      - name: Publish downloads
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          set -eu
+          tag="build-${GITHUB_RUN_NUMBER}"
+          notes='Pick the ZIP for your computer and extract it before running the launcher. See the repository README for pairing and setup.'
+          if [ -f dist/Afterglow-Android-TV-preview.apk ]; then
+            notes="$notes The Android TV preview is debug-signed and may require uninstalling an older build before installing it."
+          fi
+          if gh release view "$tag" >/dev/null 2>&1; then
+            gh release upload "$tag" dist/* --clobber
+          else
+            gh release create "$tag" dist/* --target "$GITHUB_SHA" --title "Afterglow build $GITHUB_RUN_NUMBER" --notes "$notes"
+          fi
