@@ -4,13 +4,13 @@ Turn a spare phone into ambient lighting that follows what's on your PC or Andro
 
 ## Download
 
-Choose your platform under **Assets** on the [latest release](https://github.com/1xky/Afterglow/releases/latest).
+Choose a download below or browse the [latest release](https://github.com/1xky/Afterglow/releases/latest).
 
 | Platform | Download | Start here |
 | --- | --- | --- |
-| Windows 11 (x64) | `Afterglow-Windows-x64.zip` | Extract the ZIP and double-click `Start Afterglow.cmd`. Python is included. |
-| macOS (preview) | `Afterglow-macOS.zip` | Install Python 3.10+, extract the ZIP, and run `sh "Start Afterglow.command"` in Terminal from the extracted folder. |
-| Linux (preview) | `Afterglow-Linux.zip` | Install Python 3.10+, extract the ZIP, and run `sh start-afterglow.sh` from the extracted folder. |
+| Windows 11 (x64) | [Afterglow-Windows-x64.zip](https://github.com/1xky/Afterglow/releases/latest/download/Afterglow-Windows-x64.zip) | Extract the ZIP and double-click `Start Afterglow.cmd`. Python is included. |
+| macOS (preview) | [Afterglow-macOS.zip](https://github.com/1xky/Afterglow/releases/latest/download/Afterglow-macOS.zip) | Install Python 3.10+, extract the ZIP, and run `sh "Start Afterglow.command"` in Terminal from the extracted folder. |
+| Linux (preview) | [Afterglow-Linux.zip](https://github.com/1xky/Afterglow/releases/latest/download/Afterglow-Linux.zip) | Install Python 3.10+, extract the ZIP, and run `sh start-afterglow.sh` from the extracted folder. |
 | Android TV (preview) | `Afterglow-Android-TV-preview.apk` | If available, install the APK on an Android 8.0+ TV that supports sideloading. |
 
 While release downloads are unavailable, [download the source ZIP](https://github.com/1xky/Afterglow/archive/refs/heads/main.zip). The PC launchers are in `Afterglow_pc/Afterglow`. For TV, open [Afterglow_tv](Afterglow_tv) in Android Studio, install Android SDK 35, and build the APK.
