@@ -11,6 +11,14 @@ const showButton = $("show-controls");
 const lightVideo = $("light-video");
 const settingsPanel = $("phone-settings");
 const settingsToggle = $("phone-settings-toggle");
+const setupGuide = $("setup-guide");
+const guideVideo = $("guide-video");
+const placements = {
+  center: "Behind the center", left: "Behind the left edge", right: "Behind the right edge",
+  below: "Upright below the screen", flat: "Flat on the desk",
+};
+let guideRequest;
+let guideUrl;
 const localSettings = {};
 const localKey = "afterglow-phone-settings";
 let events;
@@ -49,6 +57,46 @@ function showSettings(open) {
   settingsToggle.setAttribute("aria-expanded", String(open));
   if (!open && settingsPanel.contains(document.activeElement)) settingsToggle.focus();
   showControls();
+}
+
+async function openSetupGuide() {
+  if (setupGuide.open) return;
+  resetGuide();
+  const view = {...latest, ...localSettings};
+  const placement = Object.prototype.hasOwnProperty.call(placements, view.placement) ? view.placement : "center";
+  const orientation = view.orientation === "portrait" ||
+    (view.orientation !== "landscape" && gradient.canvas.clientHeight > gradient.canvas.clientWidth)
+    ? "portrait" : "landscape";
+  $("guide-title").textContent = `${placements[placement]} � ${orientation}`;
+  $("guide-caption").textContent = placement === "flat"
+    ? "Lay the phone flat with its screen facing up."
+    : "Face the phone screen toward the wall and leave a gap for the light to spread.";
+  $("guide-error").hidden = true;
+  setupGuide.showModal();
+  const request = new AbortController();
+  guideRequest = request;
+  try {
+    // The small bundled clips can be loaded in full and seeked locally by the browser.
+    const response = await fetch(`/guides/${placement}-${orientation}.mp4`, {signal: request.signal});
+    if (!response.ok) throw new Error("Guide unavailable");
+    const clip = await response.blob();
+    if (guideRequest !== request) return;
+    guideUrl = URL.createObjectURL(clip);
+    guideVideo.src = guideUrl;
+    void guideVideo.play().catch(() => {});
+  } catch {
+    if (guideRequest === request) $("guide-error").hidden = false;
+  }
+}
+
+function resetGuide() {
+  guideRequest?.abort();
+  guideRequest = null;
+  guideVideo.pause();
+  guideVideo.removeAttribute("src");
+  guideVideo.load();
+  if (guideUrl) URL.revokeObjectURL(guideUrl);
+  guideUrl = null;
 }
 
 function initialiseSettings() {
@@ -143,6 +191,7 @@ function stopPlayback() {
 }
 
 function disconnect(message = "") {
+  if (setupGuide.open) setupGuide.close();
   events?.close();
   events = null;
   latest = null;
@@ -171,12 +220,12 @@ $("pair-form").addEventListener("submit", event => {
   event.preventDefault();
   const code = codeInput.value.trim().toLowerCase();
   if (!/^[a-z0-9]{8}$/.test(code)) {
-    disconnect("Enter the eight characters shown on your laptop.");
+    disconnect("Enter the eight characters shown on your TV.");
     return;
   }
   $("pair-screen").hidden = true;
   screen.hidden = false;
-  showStatus("Connecting…");
+  showStatus("Connecting.");
   showControls();
   goFullscreen();
   void keepAwake();
@@ -204,7 +253,7 @@ $("pair-form").addEventListener("submit", event => {
     }
     latest = null;
     gradient.black();
-    showStatus("Reconnecting…");
+    showStatus("Reconnecting.");
     showControls();
   };
 });
@@ -216,6 +265,12 @@ document.addEventListener("fullscreenchange", () => {
 });
 $("leave").addEventListener("click", () => disconnect());
 settingsToggle.addEventListener("click", () => showSettings(settingsPanel.hidden));
+$("setup-help").addEventListener("click", () => void openSetupGuide());
+$("close-guide").addEventListener("click", () => setupGuide.close());
+setupGuide.addEventListener("close", () => { if (!setupGuide.open) resetGuide(); });
+guideVideo.addEventListener("error", () => {
+  if (setupGuide.open) $("guide-error").hidden = false;
+});
 showButton.addEventListener("click", () => {
   showSettings(false);
   void keepAwake();

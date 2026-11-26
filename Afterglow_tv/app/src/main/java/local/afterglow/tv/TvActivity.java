@@ -129,7 +129,7 @@ public final class TvActivity extends Activity {
         right.addView(text("Pair your phone", 23, TEXT, true));
         receivers = text("", 15, ACCENT, true);
         right.addView(receivers, spaced(5));
-        right.addView(text("Use the same network as your TV, then scan with your phone camera.",
+        right.addView(text("Scan on the same network. On your phone, open Placement for setup videos.",
                 15, MUTED, false), spaced(5));
         qr = new QrView();
         LinearLayout.LayoutParams qrSize = new LinearLayout.LayoutParams(dp(148), dp(148));

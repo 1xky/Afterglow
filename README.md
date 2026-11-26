@@ -21,6 +21,12 @@ You can also [download the source ZIP](https://github.com/1xky/Afterglow/archive
 2. Scan the pairing QR code, tap **Start light** on the phone, and select **Test light** on the host.
 3. On PC, try placing the phone sideways behind the center of your display with its screen facing the wall. Select **Start screen sync**, then fullscreen the movie. On macOS and Linux, choose what to share in the browser picker. On TV, select **Start sync** and approve screen sharing.
 
+### Android TV preview
+
+Pair on the same local network, then tap the phone screen and open **Placement → View phone setup video**. The guide matches the selected placement and orientation. The clips are bundled in the APK. Start with the phone behind the center of the TV in landscape, with its screen facing the wall.
+
+Use **Test light** first to check the phone connection. Then select **Start sync**, approve Android’s screen-sharing prompt, press **Home** on the remote, and try an unprotected video in another Android TV app. Return to Afterglow and select **Stop sync**. Capture support may vary by TV model and protected playback may appear black. Physical TV testing is still pending.
+
 ## Features
 
 - **Live color gradients.** The phone shows a blend of colors from different parts of the screen.

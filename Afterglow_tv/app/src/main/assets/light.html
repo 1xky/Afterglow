@@ -26,7 +26,7 @@
     <canvas id="light" width="97" height="97" aria-hidden="true"></canvas>
     <button id="show-controls" class="touch-surface" type="button" aria-label="Show light controls"></button>
     <div id="light-controls" class="light-controls">
-      <span id="light-status" role="status">Connecting…</span>
+      <span id="light-status" role="status">Connecting.</span>
       <button id="full" class="secondary" type="button" hidden>Fullscreen</button>
       <button id="phone-settings-toggle" class="secondary" type="button"
               aria-expanded="false" aria-controls="phone-settings">Placement</button>
@@ -60,9 +60,20 @@
             <option value="off">Off</option>
           </select>
         </label>
+        <p class="hint small">Recommended: behind the center in landscape, with your phone screen facing the wall.</p>
+        <button id="setup-help" class="secondary" type="button" aria-haspopup="dialog">View phone setup video</button>
       </div>
     </div>
-    <p id="sleep-note" class="sleep-note" hidden>If the screen dims, extend your phone’s display timeout.</p>
+    <p id="sleep-note" class="sleep-note" hidden>If the screen dims, extend your phone's display timeout.</p>
+    <dialog id="setup-guide" class="setup-guide" aria-labelledby="guide-title">
+      <div class="card-heading">
+        <h2 id="guide-title">Phone setup</h2>
+        <button id="close-guide" class="secondary" type="button" autofocus>Close</button>
+      </div>
+      <p id="guide-caption" class="hint small"></p>
+      <video id="guide-video" controls playsinline preload="metadata" aria-labelledby="guide-title"></video>
+      <p id="guide-error" class="hint small" role="status" hidden>The video could not play. Follow the placement instructions above.</p>
+    </dialog>
   </section>
 </body>
 </html>

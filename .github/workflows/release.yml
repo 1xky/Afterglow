@@ -3,7 +3,7 @@ name: Package Afterglow
 on:
   push:
     branches: [main]
-    paths: ['.github/workflows/release.yml']
+    paths: ['.github/workflows/release.yml', 'Afterglow_tv/**', 'Afterglow_pc/Afterglow/web/guides/**']
   workflow_dispatch:
 
 permissions:
@@ -29,20 +29,24 @@ jobs:
           git archive --format=zip -o dist/Afterglow-macOS.zip "$app" "${common[@]}" start-afterglow.sh 'Start Afterglow.command'
           git archive --format=zip -o dist/Afterglow-Linux.zip "$app" "${common[@]}" start-afterglow.sh
       - uses: actions/setup-java@v4
-        continue-on-error: true
         with:
           distribution: temurin
           java-version: '17'
       - uses: gradle/actions/setup-gradle@v4
-        continue-on-error: true
         with:
           gradle-version: '8.9'
       - name: Build Android TV preview
-        continue-on-error: true
         run: |
           set -eu
           gradle -p Afterglow_tv --no-daemon :app:assembleDebug
-          cp Afterglow_tv/app/build/outputs/apk/debug/app-debug.apk dist/Afterglow-Android-TV-preview.apk
+          apk=Afterglow_tv/app/build/outputs/apk/debug/app-debug.apk
+          for placement in center left right below flat; do
+            for orientation in landscape portrait; do
+              clip="$placement-$orientation.mp4"
+              unzip -p "$apk" "assets/guides/$clip" | cmp - "Afterglow_pc/Afterglow/web/guides/$clip"
+            done
+          done
+          cp "$apk" dist/Afterglow-Android-TV-preview.apk
       - name: Publish downloads
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}

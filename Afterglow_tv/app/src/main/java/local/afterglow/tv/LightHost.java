@@ -30,7 +30,7 @@ final class LightHost {
     private static final String SECURITY = "Cache-Control: no-store\r\n"
             + "X-Content-Type-Options: nosniff\r\nReferrer-Policy: no-referrer\r\n"
             + "Content-Security-Policy: default-src 'self'; script-src 'self'; style-src 'self'; "
-            + "connect-src 'self'; frame-ancestors 'none'; base-uri 'none'; form-action 'none'\r\n";
+            + "connect-src 'self'; media-src 'self' blob:; frame-ancestors 'none'; base-uri 'none'; form-action 'none'\r\n";
     static final String HEARTBEAT = "event: heartbeat\ndata: {}\n\n";
     static final LightHost INSTANCE = new LightHost();
 
@@ -71,12 +71,12 @@ final class LightHost {
             if (assets.isEmpty()) {
                 Map<String, byte[]> loaded = new HashMap<>();
                 for (String file : new String[] {"light.html", "style.css", "light.js", "gradient.js"}) {
-                    try (InputStream stream = context.getAssets().open(file)) {
-                        ByteArrayOutputStream bytes = new ByteArrayOutputStream();
-                        byte[] buffer = new byte[4096];
-                        int size;
-                        while ((size = stream.read(buffer)) != -1) bytes.write(buffer, 0, size);
-                        loaded.put(file, bytes.toByteArray());
+                    loaded.put(file, readAsset(context, file));
+                }
+                for (String placement : new String[] {"center", "left", "right", "below", "flat"}) {
+                    for (String orientation : new String[] {"landscape", "portrait"}) {
+                        String file = "guides/" + placement + "-" + orientation + ".mp4";
+                        loaded.put(file, readAsset(context, file));
                     }
                 }
                 assets.putAll(loaded);
@@ -87,6 +87,16 @@ final class LightHost {
             return true;
         } catch (IOException error) {
             return false;
+        }
+    }
+
+    private static byte[] readAsset(Context context, String file) throws IOException {
+        try (InputStream stream = context.getAssets().open(file)) {
+            ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+            byte[] buffer = new byte[4096];
+            int size;
+            while ((size = stream.read(buffer)) != -1) bytes.write(buffer, 0, size);
+            return bytes.toByteArray();
         }
     }
 
@@ -272,7 +282,8 @@ final class LightHost {
                     byte[] body = assets.get(file);
                     if (body == null) respond(output, "404 Not Found", "text/plain", new byte[0]);
                     else respond(output, "200 OK", file.endsWith(".html") ? "text/html" :
-                            file.endsWith(".css") ? "text/css" : "text/javascript", body);
+                            file.endsWith(".css") ? "text/css" :
+                            file.endsWith(".mp4") ? "video/mp4" : "text/javascript", body);
                 }
             } catch (IOException ignored) {
                 // The phone can disconnect at any point in the request or stream.
